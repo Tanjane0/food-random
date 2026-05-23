@@ -1,15 +1,28 @@
 <template>
   <div class="a-layout">
     <aside class="sidebar">
-      <div class="sb-brand"><span class="sb-logo"><img src="../../assets/logo.png" alt="logo"></span><div><div class="sb-role">Admin Panel</div></div></div>
+      <div class="sb-brand">
+        <div class="sb-logo-wrap">
+          <img src="../../assets/logo.png" alt="logo" class="sb-logo-img"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <span class="sb-logo-fb">🍽️</span>
+        </div>
+        <div>
+          <div class="sb-name">กินไรดี</div>
+          <div class="sb-role">Admin Panel</div>
+        </div>
+      </div>
       <div class="sb-section-label">เมนูหลัก</div>
       <nav class="sb-nav">
-        <router-link to="/admin/menus"     class="sb-item"><span><i class="bi bi-egg-fried"></i></span> จัดการเมนู</router-link>
-        <router-link to="/admin/reference" class="sb-item"><span><i class="bi bi-archive"></i></span> ประเภท / วิธีปรุง</router-link>
-        <router-link to="/admin/reports"   class="sb-item"><span><i class="bi bi-flag"></i></span> รายการ Report <span v-if="pendingCount>0" class="sb-badge">{{ pendingCount }}</span></router-link>
+        <router-link to="/admin/menus"     class="sb-item"><i class="bi bi-egg-fried sb-icon"></i> จัดการเมนู</router-link>
+        <router-link to="/admin/reference" class="sb-item"><i class="bi bi-archive sb-icon"></i> ประเภท / วิธีปรุง</router-link>
+        <router-link to="/admin/reports"   class="sb-item"><i class="bi bi-flag sb-icon"></i> รายการ Report <span v-if="pendingCount>0" class="sb-badge">{{ pendingCount }}</span></router-link>
       </nav>
       <div class="sb-bottom">
-        <div class="sb-user"><div class="sb-avatar">A</div><div><div class="sb-uname">Administrator</div><div class="sb-uemail">admin@kinraidee</div></div></div>
+        <div class="sb-user">
+          <div class="sb-avatar">A</div>
+          <div><div class="sb-uname">Administrator</div><div class="sb-uemail">admin@kinraidee</div></div>
+        </div>
         <button class="sb-logout" @click="logout" title="ออกจากระบบ">⏻</button>
       </div>
     </aside>
@@ -109,16 +122,21 @@ export default {
 .a-layout{display:flex;min-height:100vh;font-family:'Sarabun','Prompt',sans-serif;background:#F7F8FA}
 .sidebar{width:240px;background:#1A1D23;display:flex;flex-direction:column;padding:20px 0;flex-shrink:0;position:sticky;top:0;height:100vh}
 .sb-brand{display:flex;align-items:center;gap:12px;padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,.06)}
-.sb-logo-wrap{width:38px;height:38px;border-radius:10px;background:rgba(242,103,34,.2);border:1px solid rgba(242,103,34,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}.sb-logo-img{width:100%;height:100%;object-fit:contain;padding:3px}.sb-logo-fb{font-size:1.4rem;display:none}.sb-name{font-size:1rem;font-weight:800;color:white}.sb-role{font-size:.7rem;color:#6B7280;margin-top:1px}
+.sb-logo-wrap{width:38px;height:38px;border-radius:10px;background:rgba(242,103,34,.2);border:1px solid rgba(242,103,34,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.sb-logo-img{width:100%;height:100%;object-fit:contain;padding:3px}
+.sb-logo-fb{font-size:1.4rem;display:none}
+.sb-name{font-size:1rem;font-weight:800;color:white}
+.sb-role{font-size:.7rem;color:#6B7280;margin-top:1px}
 .sb-section-label{font-size:.68rem;font-weight:700;color:#4B5563;letter-spacing:1.5px;text-transform:uppercase;padding:16px 20px 8px}
-.sb-nav{display:flex;flex-direction:column;gap:2px;padding:0 10px}
-.sb-item{display:flex;align-items:center;gap:10px;color:#9CA3AF;text-decoration:none;padding:10px 12px;border-radius:10px;font-size:.88rem;font-weight:600;transition:all .18s;position:relative}
+.sb-nav{display:flex;flex-direction:column;gap:2px;padding:0 10px;flex:1}
+.sb-item{display:flex;align-items:center;gap:10px;color:#9CA3AF;text-decoration:none;padding:10px 12px;border-radius:10px;font-size:.88rem;font-weight:600;transition:all .18s}
 .sb-item:hover{background:rgba(255,255,255,.06);color:white}
 .sb-item.router-link-active{background:rgba(242,103,34,.15);color:#F26722}
+.sb-icon{font-size:.9rem;width:18px}
 .sb-badge{margin-left:auto;background:#EF4444;color:white;border-radius:50px;font-size:.68rem;font-weight:700;padding:2px 7px}
-.sb-bottom{margin-top:auto;padding:16px 10px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
+.sb-bottom{padding:16px 10px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
 .sb-user{display:flex;align-items:center;gap:10px;flex:1;min-width:0;padding:0 10px}
-.sb-avatar{width:32px;height:32px;border-radius:50%;background:#F26722;color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:#F26722;color:white;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
 .sb-uname{font-size:.82rem;font-weight:700;color:white}.sb-uemail{font-size:.72rem;color:#6B7280}
 .sb-logout{background:none;border:1px solid rgba(255,255,255,.1);color:#6B7280;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:.9rem;transition:all .18s;flex-shrink:0}
 .sb-logout:hover{background:rgba(239,68,68,.15);border-color:#EF4444;color:#EF4444}
