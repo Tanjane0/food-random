@@ -72,7 +72,7 @@
       <div v-else class="menu-grid">
         <div v-for="m in filteredMenus" :key="m.id" class="menu-card">
           <div class="card-img-wrap">
-            <img v-if="m.image_url" :src="item.image_url && item.image_url.startsWith('http') ? item.image_url : apiBase + item.image_url" :alt="item.name" :alt="m.name" class="card-img"/>
+            <img v-if="m.image_url" :src="item.image_url && item.image_url.startsWith('http') ? item.image_url : apiBase + item.image_url" :alt="item.name" class="card-img"/>
             <div v-else class="card-img-ph">🍜</div>
           </div>
           <div class="card-body">
