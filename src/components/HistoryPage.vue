@@ -59,7 +59,7 @@
 
             <!-- Image -->
             <div class="item-img-wrap">
-              <img v-if="item.image_url" :src="apiBase+item.image_url" :alt="item.name" class="item-img"/>
+              <img v-if="item.image_url" :src="item.image_url && item.image_url.startsWith('http') ? item.image_url : apiBase + item.image_url" :alt="item.name" class="item-img"/>
               <div v-else class="item-img-ph">🍜</div>
             </div>
 
@@ -92,7 +92,7 @@
 
 <script>
 import axios from 'axios'
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API = process.env.VUE_APP_API_URL || 'http://localhost:3000'
 
 export default {
   name: 'HistoryPage',
