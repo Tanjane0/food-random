@@ -5,7 +5,7 @@
     <aside class="sidebar">
       <div class="sb-brand">
         <div class="sb-logo-wrap">
-          <img src="../../assets/logo.png" alt="logo" class="sb-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <img src="/food-random/favicon.png" alt="logo" class="sb-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
           <span class="sb-logo-fb">🍽️</span>
         </div>
         <div>
