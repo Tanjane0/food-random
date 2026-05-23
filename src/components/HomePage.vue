@@ -77,7 +77,7 @@
             <div v-else key="result" class="result-area">
               <div class="r-img-wrap">
                 <div class="r-ring">
-                  <img v-if="result && result.image_url" :src="apiBase+result.image_url" class="r-photo"/>
+                  <img v-if="result && result.image_url" :src="result.image_url.startsWith('http') ? result.image_url : apiBase + result.image_url" class="r-photo"/>
                   <div v-else class="r-ph">🍜</div>
                 </div>
                 <span class="r-badge">⭐ แนะนำ</span>
