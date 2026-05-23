@@ -26,5 +26,3 @@ pnpm-debug.log*
 .env
 backend/.env
 
-# Uploaded images
-backend/uploads/
