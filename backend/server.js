@@ -342,7 +342,7 @@ app.post('/api/admin/menus', adminAuth, upload.single('image'), async (req, res)
       return res.status(400).json({ success: false, message: 'ต้องการชื่อเมนูและประเภทอาหาร' })
     }
 
-    const image_url = req.file ? `/uploads/${req.file.filename}` : null
+    const image_url = req.body.image_url || (req.file ? `/uploads/${req.file.filename}` : null)
 
     const [result] = await db.query(
       `INSERT INTO menus (name, cuisine_id, calories, image_url, is_spicy, is_vegan, is_halal)
@@ -481,7 +481,8 @@ app.put('/api/admin/menus/:id', adminAuth, upload.single('image'), async (req, r
     let sql = `UPDATE menus SET name=?, cuisine_id=?, calories=?, is_spicy=?, is_vegan=?, is_halal=?`
     const params = [name, cuisine_id, calories || null,
       is_spicy === 'true' ? 1 : 0, is_vegan === 'true' ? 1 : 0, is_halal === 'true' ? 1 : 0]
-    if (req.file) { sql += `, image_url=?`; params.push(`/uploads/${req.file.filename}`) }
+      if (req.body.image_url) { sql += `, image_url=?`; params.push(req.body.image_url) }
+      else if (req.file) { sql += `, image_url=?`; params.push(`/uploads/${req.file.filename}`) }
     sql += ` WHERE id=?`; params.push(id)
     await db.query(sql, params)
 

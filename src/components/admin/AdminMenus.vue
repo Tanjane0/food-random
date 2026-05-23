@@ -172,8 +172,8 @@
                 <input v-model="form.calories" type="number" placeholder="400"/>
               </div>
               <div class="field">
-                <label>รูปภาพ{{ editMode ? ' (ว่าง = คงรูปเดิม)' : '' }}</label>
-                <input type="file" @change="onFile" accept="image/*" class="file-inp"/>
+                <label>URL รูปภาพ{{ editMode ? ' (ว่าง = คงรูปเดิม)' : '' }}</label>
+                <input v-model="form.image_url" placeholder="https://raw.githubusercontent.com/Tanjane0/food-random/main/backend/uploads/ชื่อไฟล์.png"/>
               </div>
             </div>
 
@@ -243,6 +243,7 @@ const emptyForm = () => ({
   name:'', cuisine_id:'', calories:'',
   is_spicy:false, is_vegan:false, is_halal:false,
   health_tag_ids:[], cook_method_ids:[], meat_type_ids:[],
+  image_url:'',
 })
 
 export default {
@@ -295,7 +296,11 @@ export default {
     openAdd() { this.editMode=false; this.form=emptyForm(); this.imageFile=null; this.formError=''; this.showModal=true },
     async openEdit(menu) {
       this.editMode=true; this.editId=menu.id; this.formError=''
-      this.form={ name:menu.name, cuisine_id:menu.cuisine_id, calories:menu.calories||'', is_spicy:!!menu.is_spicy, is_vegan:!!menu.is_vegan, is_halal:!!menu.is_halal, health_tag_ids:[], cook_method_ids:[], meat_type_ids:[] }
+      this.form={ name:menu.name, cuisine_id:menu.cuisine_id, calories:menu.calories||'', 
+      is_spicy:!!menu.is_spicy, is_vegan:!!menu.is_vegan, is_halal:!!menu.is_halal, 
+      health_tag_ids:[], cook_method_ids:[], meat_type_ids:[],
+      image_url: menu.image_url || ''
+}
       this.imageFile=null
       try {
         const { data } = await axios.get(`${API}/api/admin/menus/${menu.id}/tags`, { headers:HEADERS() })
@@ -317,7 +322,7 @@ export default {
       this.form.health_tag_ids.forEach(id=>fd.append('health_tag_ids',id))
       this.form.cook_method_ids.forEach(id=>fd.append('cook_method_ids',id))
       this.form.meat_type_ids.forEach(id=>fd.append('meat_type_ids',id))
-      if (this.imageFile) fd.append('image',this.imageFile)
+      if (this.form.image_url) fd.append('image_url', this.form.image_url)
       try {
         const url=this.editMode?`${API}/api/admin/menus/${this.editId}`:`${API}/api/admin/menus`
         const { data }=await axios[this.editMode?'put':'post'](url,fd,{headers:HEADERS()})
