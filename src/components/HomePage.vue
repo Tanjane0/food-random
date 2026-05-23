@@ -140,7 +140,7 @@
             <div v-if="healthResult" class="r-card" style="width:100%;max-width:440px">
               <div class="h-top">
                 <div class="h-thumb">
-                  <img v-if="healthResult.image_url" :src="result.image_url.startsWith('http') ? result.image_url : apiBase + result.image_url" class="r-photo"/>
+                  <img v-if="healthResult.image_url" :src="healthResult.image_url.startsWith('http') ? healthResult.image_url : apiBase + healthResult.image_url" class="r-photo"/>
                   <div v-else class="r-ph" style="font-size:1.8rem">🥗</div>
                 </div>
                 <div>
