@@ -72,7 +72,7 @@
       <div v-else class="menu-grid">
         <div v-for="m in filteredMenus" :key="m.id" class="menu-card">
           <div class="card-img-wrap">
-            <img v-if="m.image_url" :src="apiBase+m.image_url" :alt="m.name" class="card-img"/>
+            <img v-if="m.image_url" :src="item.image_url && item.image_url.startsWith('http') ? item.image_url : apiBase + item.image_url" :alt="item.name" :alt="m.name" class="card-img"/>
             <div v-else class="card-img-ph">🍜</div>
           </div>
           <div class="card-body">
@@ -95,7 +95,7 @@
 
 <script>
 import axios from 'axios'
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API = process.env.VUE_APP_API_URL || 'http://localhost:3000'
 
 export default {
   name: 'BrowsePage',
