@@ -109,7 +109,7 @@
             <tr v-for="m in filteredMenus" :key="m.id" :class="{'row-flag':m.status==='flagged'}">
               <td>
                 <div class="t-thumb">
-                  <img v-if="m.image_url" :src="apiBase+m.image_url" class="t-img"/>
+                  <img v-if="m.image_url" :src="m.image_url.startsWith('http') ? m.image_url : apiBase + m.image_url" class="t-img"/>
                   <span v-else class="t-ph">🍜</span>
                 </div>
               </td>
