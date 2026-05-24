@@ -1,3 +1,6 @@
+//server.js
+
+
 const express = require('express')
 const mysql   = require('mysql2/promise')
 const cors    = require('cors')
@@ -466,6 +469,104 @@ app.post('/api/ai/fridge', async (req, res) => {
 // ============================================================
 app.listen(PORT, () => {
   console.log(`✅ กินไรดี API running at http://localhost:${PORT}`)
+})
+
+
+// ---- health_tags ----
+app.get('/api/admin/health-tags', adminAuth, async (req, res) => {
+  try {
+    const [rows] = await db.query(`SELECT * FROM health_tags ORDER BY id`)
+    res.json({ success: true, data: rows })
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
+})
+
+app.post('/api/admin/health-tags', adminAuth, async (req, res) => {
+  try {
+    const { name, label } = req.body
+    if (!name || !label) return res.status(400).json({ success: false, message: 'ต้องการ name และ label' })
+    const [r] = await db.query(`INSERT INTO health_tags (name, label) VALUES (?, ?)`, [name, label])
+    res.json({ success: true, id: r.insertId })
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
+})
+
+app.put('/api/admin/health-tags/:id', adminAuth, async (req, res) => {
+  try {
+    const { name, label } = req.body
+    if (!name || !label) return res.status(400).json({ success: false, message: 'ต้องการ name และ label' })
+    await db.query(`UPDATE health_tags SET name=?, label=? WHERE id=?`, [name, label, req.params.id])
+    res.json({ success: true })
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
+})
+
+app.delete('/api/admin/health-tags/:id', adminAuth, async (req, res) => {
+  try {
+    await db.query(`DELETE FROM menu_health_tags WHERE health_tag_id=?`, [req.params.id])
+    await db.query(`DELETE FROM health_tags WHERE id=?`, [req.params.id])
+    res.json({ success: true })
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
+})
+
+// ---- meat_types ----
+app.post('/api/admin/meat-types', adminAuth, async (req, res) => {
+  try {
+    const { name } = req.body
+    if (!name) return res.status(400).json({ success: false, message: 'ต้องการชื่อ' })
+    const [r] = await db.query(`INSERT INTO meat_types (name) VALUES (?)`, [name])
+    res.json({ success: true, id: r.insertId })
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
+})
+
+app.put('/api/admin/meat-types/:id', adminAuth, async (req, res) => {
+  try {
+    const { name } = req.body
+    if (!name) return res.status(400).json({ success: false, message: 'ต้องการชื่อ' })
+    await db.query(`UPDATE meat_types SET name=? WHERE id=?`, [name, req.params.id])
+    res.json({ success: true })
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
+})
+
+app.delete('/api/admin/meat-types/:id', adminAuth, async (req, res) => {
+  try {
+    await db.query(`DELETE FROM menu_meat_types WHERE meat_type_id=?`, [req.params.id])
+    await db.query(`DELETE FROM meat_types WHERE id=?`, [req.params.id])
+    res.json({ success: true })
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
+})
+
+// ---- bulk assign health tags ----
+app.post('/api/admin/bulk-health-tags', adminAuth, async (req, res) => {
+  try {
+    const { menu_ids, health_tag_id, action } = req.body
+    if (!menu_ids?.length || !health_tag_id) return res.status(400).json({ success: false, message: 'ข้อมูลไม่ครบ' })
+    for (const menuId of menu_ids) {
+      if (action === 'remove') {
+        await db.query(`DELETE FROM menu_health_tags WHERE menu_id=? AND health_tag_id=?`, [menuId, health_tag_id])
+      } else {
+        await db.query(`INSERT IGNORE INTO menu_health_tags (menu_id, health_tag_id) VALUES (?, ?)`, [menuId, health_tag_id])
+      }
+    }
+    res.json({ success: true, message: `${action === 'remove' ? 'ลบ' : 'เพิ่ม'} tag สำเร็จ` })
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
+})
+
+// ---- dashboard stats ----
+app.get('/api/admin/stats', adminAuth, async (req, res) => {
+  try {
+    const [[total]]   = await db.query(`SELECT COUNT(*) as cnt FROM menus`)
+    const [[normal]]  = await db.query(`SELECT COUNT(*) as cnt FROM menus WHERE status='normal'`)
+    const [[flagged]] = await db.query(`SELECT COUNT(*) as cnt FROM menus WHERE status='flagged'`)
+    const [[halal]]   = await db.query(`SELECT COUNT(*) as cnt FROM menus WHERE is_halal=1`)
+    const [[vegan]]   = await db.query(`SELECT COUNT(*) as cnt FROM menus WHERE is_vegan=1`)
+    const [[spicy]]   = await db.query(`SELECT COUNT(*) as cnt FROM menus WHERE is_spicy=1`)
+    const [[reports]] = await db.query(`SELECT COUNT(*) as cnt FROM reports WHERE status='pending'`)
+    const [byCuisine] = await db.query(`SELECT c.name, COUNT(*) as cnt FROM menus m JOIN cuisines c ON m.cuisine_id=c.id GROUP BY c.id ORDER BY cnt DESC`)
+    const [byHealth]  = await db.query(`SELECT ht.label, COUNT(*) as cnt FROM menu_health_tags mht JOIN health_tags ht ON mht.health_tag_id=ht.id GROUP BY ht.id ORDER BY cnt DESC`)
+    res.json({ success: true, data: {
+      total: total.cnt, normal: normal.cnt, flagged: flagged.cnt,
+      halal: halal.cnt, vegan: vegan.cnt, spicy: spicy.cnt,
+      pendingReports: reports.cnt, byCuisine, byHealth
+    }})
+  } catch (err) { res.status(500).json({ success: false, message: err.message }) }
 })
 // ============================================================
 //  ROUTES — Admin แก้ไขเมนู + จัดการ cuisines/cook_methods
