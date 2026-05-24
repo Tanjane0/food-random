@@ -17,7 +17,7 @@
 
       <!-- HERO รูป -->
       <div class="hero-img">
-        <img v-if="menu.image_url" :src="apiBase + menu.image_url" :alt="menu.name" class="hero-photo"/>
+        <img v-if="menu.image_url" :src="m.image_url.startsWith('http') ? m.image_url : apiBase + m.image_url" class="hero-photo"/>
         <div v-else class="hero-ph">🍜</div>
         <div class="hero-overlay"/>
         <router-link to="/" class="btn-back">← กลับ</router-link>
