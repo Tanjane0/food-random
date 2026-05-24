@@ -14,6 +14,7 @@
       </div>
       <div class="sb-section-label">เมนูหลัก</div>
       <nav class="sb-nav">
+        <router-link to="/admin/dashboard" class="sb-item"><span class="sb-icon"><i class="bi bi-grid"></i></span> Dashboard</router-link>
         <router-link to="/admin/menus"     class="sb-item"><i class="bi bi-egg-fried sb-icon"></i> จัดการเมนู</router-link>
         <router-link to="/admin/reference" class="sb-item"><i class="bi bi-archive sb-icon"></i> ประเภท / วิธีปรุง</router-link>
         <router-link to="/admin/reports"   class="sb-item"><i class="bi bi-flag sb-icon"></i> รายการ Report <span v-if="pendingCount>0" class="sb-badge">{{ pendingCount }}</span></router-link>
@@ -170,3 +171,5 @@ export default {
 .btn-resolve:hover{background:#059669;color:white;border-color:#059669}
 .table-footer{padding:12px 28px;font-size:.78rem;color:#9CA3AF}
 </style>
+
+

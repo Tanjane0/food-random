@@ -1,3 +1,4 @@
+
 <template>
   <div class="a-layout">
 
@@ -16,6 +17,7 @@
 
       <div class="sb-section-label">เมนูหลัก</div>
       <nav class="sb-nav">
+        <router-link to="/admin/dashboard" class="sb-item"><span class="sb-icon"><i class="bi bi-grid"></i></span> Dashboard</router-link>
         <router-link to="/admin/menus"     class="sb-item"><span class="sb-icon"><i class="bi bi-egg-fried"></i></span> จัดการเมนู</router-link>
         <router-link to="/admin/reference" class="sb-item"><span class="sb-icon"><i class="bi bi-archive"></i></span> ประเภท / วิธีปรุง</router-link>
         <router-link to="/admin/reports"   class="sb-item">
@@ -483,3 +485,5 @@ export default {
 .modal-enter-from,.modal-leave-to{opacity:0}
 .modal-enter-from .modal-panel,.modal-leave-to .modal-panel{transform:scale(.96) translateY(10px)}
 </style>
+
+
